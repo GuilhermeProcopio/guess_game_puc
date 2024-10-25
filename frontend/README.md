@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Projeto de Aplicação Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Sumário
+- [Visão Geral](#visão-geral)
+- [Opções de Design](#opções-de-design)
+- [Instalação](#instalação)
+- [Execução](#execução)
+- [Atualização](#atualização)
+- [Componentes](#componentes)
 
-## Available Scripts
+## Visão Geral
+Este projeto é uma aplicação web composta por um frontend em React e um backend em Python. Utilizamos Docker para facilitar a configuração e a execução dos serviços.
 
-In the project directory, you can run:
+## Opções de Design
 
-### `npm start`
+### Serviços
+Optamos por dividir a aplicação em dois serviços principais:
+- **Frontend**: Implementado em React, localizado na pasta `frontend/`.
+- **Backend**: Implementado em Python, localizado na pasta `guess/` e `repository/`.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Volumes
+Utilizamos volumes Docker para persistir dados importantes e facilitar o desenvolvimento:
+- Volume para persistir dados do banco de dados.
+- Volume para compartilhar código-fonte entre o host e os containers.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Redes
+Criamos uma rede Docker personalizada para permitir a comunicação entre os containers do frontend e backend.
 
-### `npm test`
+### Estratégia de Balanceamento de Carga
+Utilizamos o Nginx como proxy reverso para balancear a carga entre múltiplas instâncias do backend, garantindo alta disponibilidade e escalabilidade.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Instalação
+Para instalar o projeto, siga os passos abaixo:
 
-### `npm run build`
+1. Clone o repositório:
+    ```sh
+    git clone https://github.com/seu-usuario/seu-repositorio.git
+    cd seu-repositorio
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Instale as dependências do frontend:
+    ```sh
+    cd frontend
+    npm install
+    cd ..
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Construa as imagens Docker:
+    ```sh
+    docker-compose build
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Execução
+Para rodar o projeto, utilize o Docker Compose:
 
-### `npm run eject`
+```sh
+docker-compose up
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Componentes
+Frontend
+O frontend é uma aplicação React localizada na pasta frontend/. Para atualizar o frontend, você pode modificar o código-fonte em frontend/src/ e reconstruir a imagem Docker.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Backend
+O backend é uma aplicação Python localizada nas pastas guess/ e repository/. Para atualizar o backend, você pode modificar o código-fonte e reconstruir a imagem Docker.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Banco de Dados
+Utilizamos diferentes bancos de dados, como DynamoDB, PostgreSQL e SQLite, localizados na pasta repository/. Para atualizar a configuração do banco de dados, modifique os arquivos correspondentes e reinicie os serviços.
