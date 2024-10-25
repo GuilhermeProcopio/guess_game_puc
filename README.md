@@ -1,133 +1,8 @@
-Aqui está um exemplo de um arquivo `README.md` para o seu jogo:
+# Guess Game
 
----
+## Visão Geral
 
-# Jogo de Adivinhação com Flask
-
-Este é um simples jogo de adivinhação desenvolvido utilizando o framework Flask. O jogador deve adivinhar uma senha criada aleatoriamente, e o sistema fornecerá feedback sobre o número de letras corretas e suas respectivas posições.
-
-## Funcionalidades
-
-- Criação de um novo jogo com uma senha fornecida pelo usuário.
-- Adivinhe a senha e receba feedback se as letras estão corretas e/ou em posições corretas.
-- As senhas são armazenadas  utilizando base64.
-- As adivinhações incorretas retornam uma mensagem com dicas.
-  
-## Requisitos
-
-- Python 3.8+
-- Flask
-- Um banco de dados local (ou um mecanismo de armazenamento configurado em `current_app.db`)
-- node 18.17.0
-
-## Instalação
-
-1. Clone o repositório:
-
-   ```bash
-   git clone https://github.com/fams/guess_game.git
-   cd guess-game
-   ```
-
-2. Crie um ambiente virtual e ative-o:
-
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # Linux/Mac
-   venv\Scripts\activate  # Windows
-   ```
-
-3. Instale as dependências:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Configure o banco de dados com as variáveis de ambiente no arquivo start-backend.sh
-    1. Para sqlite
-
-        ```bash
-            export FLASK_APP="run.py"
-            export FLASK_DB_TYPE="sqlite"            # Use SQLITE
-            export FLASK_DB_PATH="caminho/db.sqlite" # caminho do banco
-        ```
-
-    2. Para Postgres
-
-        ```bash
-            export FLASK_APP="run.py"
-            export FLASK_DB_TYPE="postgres"       # Use postgres
-            export FLASK_DB_USER="postgres"       # Usuário do banco
-            export FLASK_DB_NAME="postgres"       # Nome do Banco
-            export FLASK_DB_PASSWORD="secretpass" # Senha do banco
-            export FLASK_DB_HOST="localhost"      # Hostname
-            export FLASK_DB_PORT="5432"           # Porta
-        ```
-
-    3. Para DynamoDB
-
-        ```bash
-        export FLASK_APP="run.py"
-        export FLASK_DB_TYPE="dynamodb"       # Use postgres
-        export AWS_DEFAULT_REGION="us-east-1" # AWS region
-        export AWS_ACCESS_KEY_ID="FAKEACCESSKEY123456" 
-        export AWS_SECRET_ACCESS_KEY="FakeSecretAccessKey987654321"
-        export AWS_SESSION_TOKEN="FakeSessionTokenABCDEFGHIJKLMNOPQRSTUVXYZ1234567890"
-        ```
-
-5. Execute o backend
-
-   ```bash
-   ./start-backend.sh &
-   ```
-
-## Frontend
-No diretorio de frontend
-
-1. Instale o node com o nvm. Se não tiver o nvm instalado, siga o [tutorial](https://github.com/nvm-sh/nvm?tab=readme-ov-file#installing-and-updating)
-
-    ```bash
-    nvm install 18.17.0
-    nvm use 18.17.0
-    # Habilite o yarn
-    corepack enable
-    ```
-
-2. Instale as dependências do node com o npm:
-
-    ```bash
-    npm install
-    ```
-
-3. Exporte a url onde está executando o backend e execute o backend.
-
-   ```bash
-    export REACT_APP_BACKEND_URL=http://localhost:5000
-    yarn start
-   ```
-
-## Como Jogar
-
-### 1. Criar um novo jogo
-
-Acesse a url do frontend http://localhost:3000
-
-Digite uma frase secreta
-
-Envie
-
-Salve o game-id
-
-
-### 2. Adivinhar a senha
-
-Acesse a url do frontend http://localhost:3000
-
-Vá para o endponint breaker
-
-entre com o game_id que foi gerado pelo Creator
-
-Tente adivinhar
+Este projeto é um jogo de adivinhação de senha desenvolvido com um backend em Flask e um frontend em React. O projeto utiliza Docker e Docker Compose para facilitar a configuração e execução dos serviços.
 
 ## Estrutura do Código
 
@@ -141,15 +16,148 @@ Tente adivinhar
 - **`Guess`**: Classe responsável por gerenciar a lógica de comparação entre a senha e a tentativa do jogador.
 - **`WrongAttempt`**: Exceção personalizada que é levantada quando a tentativa está incorreta.
 
+## Opções de Design
 
+### Serviços
 
-## Melhorias Futuras
+- **Backend**: Implementado em Flask, gerencia a lógica do jogo e a comunicação com o banco de dados.
+- **Frontend**: Implementado em React, fornece a interface do usuário.
+- **Banco de Dados**: Utiliza PostgreSQL para armazenar os dados do jogo.
+- **Nginx**: Utilizado como um proxy reverso para balancear a carga entre o frontend e o backend.
 
-- Implementar autenticação de usuário para salvar e carregar jogos.
-- Adicionar limite de tentativas.
-- Melhorar a interface de feedback para as tentativas de adivinhação.
+### Volumes
 
-## Licença
+- **db_data**: Volume para persistir os dados do banco de dados PostgreSQL.
 
-Este projeto está licenciado sob a [MIT License](LICENSE).
+### Redes
+
+- **default**: Rede padrão criada pelo Docker Compose para permitir a comunicação entre os serviços.
+
+### Estratégia de Balanceamento de Carga
+
+- **Nginx**: Configurado para rotear as requisições para o backend e servir o frontend.
+
+## Configuração
+
+### Pré-requisitos
+
+- Docker
+- Docker Compose
+
+### Instalação
+
+1. Clone o repositório:
+
+    ```sh
+    git clone https://github.com/GuilhermeProcopio/guess_game.git
+    cd guess_game
+    ```
+
+2. Instale as dependências do frontend:
+
+    ```sh
+    cd frontend
+    npm install
+    cd ..
+    ```
+
+### Configuração do Ambiente
+
+1. Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis de ambiente:
+
+    ```env
+    POSTGRES_DB=postgres
+    POSTGRES_USER=postgres
+    POSTGRES_PASSWORD=secretpass
+    DATABASE_URL=postgres://postgres:secretpass@db:5432/postgres
+    ```
+
+## Como Iniciar
+
+1. Construa e inicie os serviços com Docker Compose:
+
+    ```sh
+    docker-compose up --build
+    ```
+
+2. Acesse o frontend em `http://localhost:3000`.
+
+## Como Jogar
+
+### 1. Criar um novo jogo
+
+- Acesse a URL do frontend `http://localhost:3000`.
+- Digite uma frase secreta e envie.
+- Salve o `game_id` gerado.
+
+### 2. Adivinhar a senha
+
+- Acesse a URL do frontend `http://localhost:3000`.
+- Vá para o endpoint `breaker`.
+- Entre com o `game_id` que foi gerado pelo Creator.
+- Tente adivinhar a senha.
+
+## Como Testar
+
+### Testes Automatizados
+
+1. **Frontend**: No terminal, navegue até o diretório `frontend` e execute:
+
+    ```sh
+    npm test
+    ```
+
+2. **Backend**: No terminal, navegue até o diretório raiz do projeto e execute:
+
+    ```sh
+    pytest
+    ```
+
+## Atualização dos Serviços
+
+### Atualização das Imagens Docker
+
+Para atualizar qualquer componente, basta alterar a versão da imagem Docker no arquivo `docker-compose.yml` e reconstruir os serviços.
+
+Por exemplo, para atualizar a versão do Node.js no frontend:
+
+1. Abra o arquivo `frontend/Dockerfile` e altere a linha:
+
+    ```Dockerfile
+    FROM node:16 as build
+    ```
+
+    para
+
+    ```Dockerfile
+    FROM node:18 as build
+    ```
+
+2. Reconstrua e reinicie os serviços:
+
+    ```sh
+    docker-compose up --build
+    ```
+
+### Atualização do Backend
+
+Para atualizar o backend, altere a versão da imagem base no arquivo [Dockerfile]():
+
+1. Abra o arquivo [Dockerfile]() e altere a linha:
+
+    ```Dockerfile
+    FROM python:3.9-slim
+    ```
+
+    para
+
+    ```Dockerfile
+    FROM python:3.10-slim
+    ```
+
+2. Reconstrua e reinicie os serviços:
+
+    ```sh
+    docker-compose up --build
+    ```
 
